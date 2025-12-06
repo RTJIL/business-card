@@ -1,9 +1,19 @@
-import { MdEmail } from "react-icons/md"
-import { FaLinkedin, FaGithub } from "react-icons/fa"
-import { FaXTwitter, FaDev } from "react-icons/fa6"
+import toast, { Toaster } from "react-hot-toast"
 import persons from "./data/persons.ts"
 
+import ProfileHeader from "./components/ProfileHeader.tsx"
+import InfoSection from "./components/InfoSection.tsx"
+import SocialLinks from "./components/SocialLinks.tsx"
+
 export default function App() {
+  if (!persons[0]) {
+    return (
+      <section className={`no-found`} key={!persons[1] ? "no-found" : "found"}>
+        <h1>Not Found</h1>
+      </section>
+    )
+  }
+
   const {
     src,
     alt,
@@ -22,62 +32,31 @@ export default function App() {
   const handleClick = async (): Promise<void> => {
     try {
       await navigator.clipboard.writeText(email)
-      alert("Email copied to clipboard.")
+      toast.success("Email copied.")
     } catch (err) {
       console.error(err)
-      alert("Failed to copy email to clipboard.")
+      toast.error("Failed to copy email.")
     }
   }
 
   return (
     <>
-      <header>
-        <img src={src} alt={alt} />
-      </header>
-      <main>
-        <section className="info-top">
-          <h1>{name}</h1>
-          <p>{profession}</p>
-          <p>{website}</p>
-        </section>
+      <ProfileHeader src={src} alt={alt} />
 
-        <section className="sm">
-          <button onClick={handleClick}>
-            <MdEmail className="icon" />
-            <span>Email</span>
-          </button>
-          <a href={linkedIn} target="_blank" rel="noopener noreferrer">
-            <FaLinkedin className="icon" />
-            <span>LinkedIn</span>
-          </a>
-        </section>
+      <InfoSection
+        name={name}
+        profession={profession}
+        website={website}
+        email={email}
+        linkedIn={linkedIn}
+        about={about}
+        interests={interests}
+        handleClick={handleClick}
+      />
 
-        <section className="info-general">
-          <section>
-            <h2>About</h2>
-            <p>{about}</p>
-          </section>
+      <SocialLinks github={github} x={x} dev={dev} />
 
-          <section>
-            <h2>Interests</h2>
-            <p>{interests.join(". ")}</p>
-          </section>
-        </section>
-      </main>
-
-      <footer>
-        <a href={github} target="_blank" rel="noopener noreferrer">
-          <FaGithub />
-        </a>
-
-        <a href={x} target="_blank" rel="noopener noreferrer">
-          <FaXTwitter />
-        </a>
-
-        <a href={dev} target="_blank" rel="noopener noreferrer">
-          <FaDev />
-        </a>
-      </footer>
+      <Toaster />
     </>
   )
 }
