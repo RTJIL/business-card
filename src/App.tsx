@@ -1,7 +1,7 @@
 import { MdEmail } from "react-icons/md"
 import { FaLinkedin, FaGithub } from "react-icons/fa"
 import { FaXTwitter, FaDev } from "react-icons/fa6"
-import persons from "./data/persons"
+import persons from "./data/persons.ts"
 
 export default function App() {
   const {
